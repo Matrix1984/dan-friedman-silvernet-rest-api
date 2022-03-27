@@ -19,8 +19,8 @@ namespace Application.Controllers
         }
 
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetTenantById(long id)
+        [HttpGet("{userId}")]
+        public async Task<IActionResult> GetTenantById(long userId)
         {
             return Ok();
         }
