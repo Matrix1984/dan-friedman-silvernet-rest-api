@@ -21,7 +21,14 @@ namespace Infrastructure.Repositories.TenantsRepo
         }
 
         public async Task<Tenant> GetEntity(long id)
-          => await this.dbContext.Tenants.FindAsync(id); 
+          => await this.dbContext.Tenants.FindAsync(id);
+
+        public bool IsTenantExist(long id)
+        {
+            return (from n in this.dbContext.Tenants
+                    where n.TenantId == id
+                    select n).AsNoTracking().FirstOrDefault() != null;
+        }
 
         public async Task UpdateEntity(Tenant tenant)
         {
@@ -39,8 +46,6 @@ namespace Infrastructure.Repositories.TenantsRepo
 
         public async Task<IEnumerable<Tenant>> ListEntities()
           => await (from ten in this.dbContext.Tenants
-                          select ten).ToArrayAsync(); 
-
-
+                          select ten).ToArrayAsync();  
     }
 }

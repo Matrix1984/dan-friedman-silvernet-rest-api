@@ -6,7 +6,7 @@ using Models.Entites;
 
 namespace Application.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/tenants")]
     [ApiController]
     public class TenantController : ControllerBase
     {
@@ -19,7 +19,7 @@ namespace Application.Controllers
             this._tenantRepository = tenantRepository;
             this._mapper = mapper;
         }
-         
+
         [HttpPost]
         public async Task<IActionResult> CreateUser(CreateTenantDTO requestDTO)
         {
@@ -30,42 +30,42 @@ namespace Application.Controllers
             return CreatedAtAction(nameof(GetTenantById), new
             {
                 id = tenant.TenantId
-            }); 
-        } 
+            });
+        }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetTenantById(long id)
-        { 
-            Tenant tenant = await this._tenantRepository.GetEntity(id);
-
-            if (tenant == null)
-                return NotFound();
-
-            SelectTenantDTO tenantDTO = 
-                this._mapper.Map<SelectTenantDTO>(tenant);
-
-            return Ok(tenantDTO);
-        } 
-         
-        [HttpPut]
-        public async Task<IActionResult> UpdateTenant([FromQuery] long id, [FromBody] UpdateTenantDTO requestDTO)
         {
             Tenant tenant = await this._tenantRepository.GetEntity(id);
 
             if (tenant == null)
                 return NotFound();
 
-            tenant = this._mapper.Map<Tenant>(requestDTO);
+            SelectTenantDTO tenantDTO =
+                this._mapper.Map<SelectTenantDTO>(tenant);
+
+            return Ok(tenantDTO);
+        }
+
+        [HttpPut("{id:long}")]
+        public async Task<IActionResult> UpdateTenant(long id, UpdateTenantDTO requestDTO)
+        {
+            if (!this._tenantRepository.IsTenantExist(id))
+                return NotFound();
+
+            Tenant tenant = this._mapper.Map<Tenant>(requestDTO);
+
+            tenant.TenantId = id;
 
             await this._tenantRepository.UpdateEntity(tenant);
 
             return NoContent();
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> DeleteTenant(long tenantId)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteTenant(long id)
         {
-            Tenant tenant = await this._tenantRepository.GetEntity(tenantId);
+            Tenant tenant = await this._tenantRepository.GetEntity(id);
 
             if (tenant == null)
                 return NotFound();
@@ -75,12 +75,12 @@ namespace Application.Controllers
             return NoContent();
         }
 
-        [HttpGet("tenants")]
+        [HttpGet("/api/tenants")]
         public async Task<IActionResult> ListTenants()
         {
             //List to excel.
-            IEnumerable<SelectTenantDTO> tenants = 
-                this._mapper.Map<IEnumerable<SelectTenantDTO>>(await this._tenantRepository.ListEntities());  
+            IEnumerable<SelectTenantDTO> tenants =
+                this._mapper.Map<IEnumerable<SelectTenantDTO>>(await this._tenantRepository.ListEntities());
 
             return Ok(tenants);
         }

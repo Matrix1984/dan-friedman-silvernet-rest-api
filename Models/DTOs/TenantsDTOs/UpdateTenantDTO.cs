@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace Models.DTOs.TenantsDTOs
 {
     public class UpdateTenantDTO
-    {
+    { 
         [RegularExpression(@"^([A-Za-z]+)$")]
         [Required]
         public string Name { get; set; }
@@ -19,9 +19,5 @@ namespace Models.DTOs.TenantsDTOs
          
         [Required]
         public DateTime CreationDate { get; set; }
-
-        [Required]
-        [Range(1, Int64.MaxValue)]
-        public long TenantId { get; set; }
     }
 }

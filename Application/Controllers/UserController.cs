@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Infrastructure.Repositories.TenantsRepo;
 using Infrastructure.Repositories.UsersRepo;
 using Microsoft.AspNetCore.Mvc;
 using Models.DTOs.UsersDTOs;
@@ -6,23 +7,29 @@ using Models.Entites;
 
 namespace Application.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/users")]
     [ApiController]
     public class UserController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
 
+        private readonly ITenantRepository _tenantRepository; 
+
         public readonly IMapper _mapper;
-        public UserController(IUserRepository userRepository,
+        public UserController(
+            ITenantRepository tenantRepository, 
+            IUserRepository userRepository,
             IMapper mapper)
         {
+            this._tenantRepository = tenantRepository;
             this._userRepository = userRepository;
             this._mapper = mapper;
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUserById(long id)
-        {
+        { 
+      
             User user = await this._userRepository.GetEntity(id);
 
             if (user == null)
@@ -36,6 +43,11 @@ namespace Application.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateUser(CreateUserDTO requestDTO)
         {
+            Tenant tenant = await this._tenantRepository.GetEntity(requestDTO.TenantId);
+
+            if (tenant == null)
+                return NotFound();
+
             User user = this._mapper.Map<User>(requestDTO);
 
             await this._userRepository.CreateEntity(user);
@@ -45,23 +57,28 @@ namespace Application.Controllers
                 id = user.UserId
             });
         }
-         
-        [HttpPut]
-        public async Task<IActionResult> UpdateUser([FromQuery]long id, [FromBody]UpdateUserDTO requestDTO)
-        {
-            User user = await this._userRepository.GetEntity(id);
 
-            if (user == null) 
+        [HttpPut("{id:long}")]
+        public async Task<IActionResult> UpdateUser(long id, UpdateUserDTO requestDTO)
+        { 
+            Tenant tenant = await this._tenantRepository.GetEntity(requestDTO.TenantId);
+
+            if (tenant == null)
+                return NotFound(); 
+
+            User user =  this._mapper.Map<User>(requestDTO);
+
+            user.UserId = id;
+
+            if (!this._userRepository.IsUserExist(id))
                 return NotFound();
 
-            user = this._mapper.Map<User>(requestDTO); 
-             
             await this._userRepository.UpdateEntity(user);
 
             return NoContent();
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(long id)
         {
             User user = await this._userRepository.GetEntity(id);
@@ -74,7 +91,7 @@ namespace Application.Controllers
             return NoContent();
         }
 
-        [HttpGet("tenants/{tenantId}/users")]
+        [HttpGet("/api/tenants/{tenantId}/users")]
         public async Task<IActionResult> ListUsers(long tenantId)
            => Ok(this._mapper.Map<IEnumerable<SelectUserDTO>>(await this._userRepository.ListEntities(tenantId)));
     }

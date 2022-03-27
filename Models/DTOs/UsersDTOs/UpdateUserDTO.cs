@@ -21,6 +21,10 @@ namespace Models.DTOs.UsersDTOs
         public string Email { get; set; }
 
         [Required]
-        public DateTime CreationDate { get; set; }
+        public DateTime CreationDate { get; set; } 
+
+        [Required]
+        [Range(1, Int64.MaxValue)]
+        public long TenantId { get; set; }
     }
 }

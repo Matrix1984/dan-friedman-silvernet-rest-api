@@ -23,7 +23,16 @@ namespace Infrastructure.Repositories.UsersRepo
 
         public async Task<User> GetEntity(long id)
           => await this.dbContext.Users.FindAsync(id);
-         
+
+
+         public bool IsUserExist(long id)
+        {
+            return (from n in this.dbContext.Users
+                   where n.UserId==id
+                   select n).AsNoTracking().FirstOrDefault() != null;
+         }
+   
+
         public async Task UpdateEntity(User user)
         {
             this.dbContext.Entry<User>(user).State = EntityState.Modified;

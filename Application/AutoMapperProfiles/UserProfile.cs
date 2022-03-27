@@ -12,7 +12,8 @@ namespace Application.AutoMapperProfiles
 
             CreateMap<CreateUserDTO, User>();
 
-            CreateMap<UpdateUserDTO, User>();
+            CreateMap<UpdateUserDTO, User>()
+                    .ForMember(dest => dest.UserId, opt => opt.Ignore());
         }
     }
 }

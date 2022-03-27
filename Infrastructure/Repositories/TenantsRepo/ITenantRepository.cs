@@ -19,5 +19,7 @@ namespace Infrastructure.Repositories.TenantsRepo
         Task CreateEntity(Tenant tenant);
 
         Task<IEnumerable<Tenant>> ListEntities();
+
+        bool IsTenantExist(long id);
     }
 }
