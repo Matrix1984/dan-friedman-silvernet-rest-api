@@ -18,6 +18,10 @@ namespace Models.DTOs.UsersDTOs
 
         [EmailAddress]
         [Required]
-        public string Email { get; set; }
+        public string Email { get; set; } 
+         
+        [Required]
+        [Range(1, Int64.MaxValue)]
+        public long TenantId { get; set; }
     }
 }

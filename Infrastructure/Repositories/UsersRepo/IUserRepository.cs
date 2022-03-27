@@ -14,6 +14,6 @@ namespace Infrastructure.Repositories.UsersRepo
         Task UpdateEntity(User user); 
         Task DeleteEntity(User user); 
         Task CreateEntity(User user); 
-        Task<IEnumerable<User>> ListEntities(int tenantId);
+        Task<IEnumerable<User>> ListEntities(long tenantId);
     }
 }

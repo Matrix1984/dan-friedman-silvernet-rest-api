@@ -14,6 +14,8 @@ namespace Infrastructure.Repositories.UsersRepo
 
         public async Task CreateEntity(User user)
         {
+            user.CreationDate = DateTime.Now;
+
             this.dbContext.Users.Add(user);
 
             await this.dbContext.SaveChangesAsync();
@@ -36,7 +38,7 @@ namespace Infrastructure.Repositories.UsersRepo
             await this.dbContext.SaveChangesAsync();
         } 
 
-        public async Task<IEnumerable<User>> ListEntities(int tenantId)
+        public async Task<IEnumerable<User>> ListEntities(long tenantId)
          => await (from users in this.dbContext.Users
                     where users.TenantId == tenantId
                     select users).ToArrayAsync(); 

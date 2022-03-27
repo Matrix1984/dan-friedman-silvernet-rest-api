@@ -13,6 +13,8 @@ namespace Infrastructure.Repositories.TenantsRepo
 
         public async Task CreateEntity(Tenant tenant)
         {
+            tenant.CreationDate = DateTime.Now;
+
             this.dbContext.Tenants.Add(tenant);
 
             await this.dbContext.SaveChangesAsync();

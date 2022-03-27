@@ -16,8 +16,5 @@ namespace Models.DTOs.TenantsDTOs
         [Phone]
         [Required]
         public string Phone { get; set; }
-
-        [Required]
-        public long TenantId { get; set; }
     }
 }
