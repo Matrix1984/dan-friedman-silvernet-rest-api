@@ -1,5 +1,7 @@
 
 using Infrastructure;
+using Infrastructure.Repositories.TenantsRepo;
+using Infrastructure.Repositories.UsersRepo;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,8 +19,10 @@ builder.Services.AddDbContext<TenantDbContext>(opt =>
 
 builder.Services.AddHttpClient();
 
-//builder.Services.AddScoped<ICityRepository, CityRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
+builder.Services.AddScoped<ITenantRepository, TenantRepository>();
+ 
 var app = builder.Build(); 
 
 app.UseRouting();
