@@ -1,10 +1,4 @@
-﻿using DataAnnotationsExtensions;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Models.DTOs.UsersDTOs
 {
@@ -22,8 +16,11 @@ namespace Models.DTOs.UsersDTOs
         [Required]
         public string Phone { get; set; }
 
-        [Email]
+        [EmailAddress]
         [Required]
-        public string Email { get; set; } 
+        public string Email { get; set; }
+
+        [Required]
+        public DateTime CreationDate { get; set; }
     }
 }

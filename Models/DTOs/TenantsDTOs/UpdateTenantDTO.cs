@@ -1,4 +1,4 @@
-﻿using DataAnnotationsExtensions;
+﻿
 using System.ComponentModel.DataAnnotations;
 
 namespace Models.DTOs.TenantsDTOs
@@ -15,6 +15,9 @@ namespace Models.DTOs.TenantsDTOs
 
         [Phone]
         [Required]
-        public string Phone { get; set; } 
+        public string Phone { get; set; }
+         
+        [Required]
+        public DateTime CreationDate { get; set; }
     }
 }

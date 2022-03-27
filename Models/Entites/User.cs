@@ -18,7 +18,11 @@ namespace Models.Entites
 
         public string Email { get; set; }
 
-        public DateTime CreationDate { get; set; } 
+        public DateTime CreationDate { get; set; }
+
+        public long TenantId { get; set; }
+
+        public Tenant Tenant { get; set; }
     }
 }
 
