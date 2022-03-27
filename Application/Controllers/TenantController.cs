@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Fingers10.ExcelExport.ActionResults;
 using Infrastructure.Repositories.TenantsRepo;
 using Microsoft.AspNetCore.Mvc;
 using Models.DTOs.TenantsDTOs;
@@ -82,7 +83,7 @@ namespace Application.Controllers
             IEnumerable<SelectTenantDTO> tenants =
                 this._mapper.Map<IEnumerable<SelectTenantDTO>>(await this._tenantRepository.ListEntities());
 
-            return Ok(tenants);
+            return new ExcelResult<SelectTenantDTO>(tenants, "Tenants Sheet", "Tenants"); 
         }
     }
 }
